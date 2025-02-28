@@ -20,6 +20,7 @@
  */
 package org.micromanager.plugins.micromanager;
 
+import com.google.protobuf.InvalidProtocolBufferException;
 import fromScenery.Settings;
 import fromScenery.SettingsEditor;
 import kotlin.Unit;
@@ -104,7 +105,7 @@ public class MicrosceneryStreamFrame extends JFrame implements ProcessorConfigur
 
         miscContainer.add(new JLabel("Vertex size"));
         JTextField vertexSizeText = new JTextField(
-                msSettings.get(microscenery.Settings.MMMicroscope.VertexDiameter,1.0f).toString()
+                msSettings.get(microscenery.Settings.MMMicroscope.VertexDiameter,(float)studio.core().getPixelSizeUm()).toString()
                 ,10);
         vertexSizeText.addActionListener(e -> {
             if (validFloat(vertexSizeText)){
@@ -141,7 +142,7 @@ public class MicrosceneryStreamFrame extends JFrame implements ProcessorConfigur
         miscContainer.add(streamRateLimitText, "wrap");
 
         JButton settingsButton = new JButton("Settings");
-        settingsButton.addActionListener(e -> new SettingsEditor(msSettings,new JFrame("org.micromanager.plugins.micromanager.SettingsEditor"),480, 500));
+        settingsButton.addActionListener(e -> new SettingsEditor(msSettings,new JFrame("Microscenery Server Settings"),480, 500));
         miscContainer.add(settingsButton, "wrap");
 
         JButton addPipelineButton = new JButton("Add stream to pipeline");
@@ -194,6 +195,21 @@ public class MicrosceneryStreamFrame extends JFrame implements ProcessorConfigur
     @Override
     public void dispose() {
         super.dispose();
+    }
+
+    private Unit updateLabels(BaseServerSignal bssignal) {
+        RemoteMicroscopeSignal signal = null;
+        if (bssignal instanceof BaseServerSignal.AppSpecific) {
+            try {
+                me.jancasus.microscenery.network.v3.RemoteMicroscopeSignal rms =
+                        me.jancasus.microscenery.network.v3.RemoteMicroscopeSignal.parseFrom(((BaseServerSignal.AppSpecific) bssignal).getData());
+                signal = RemoteMicroscopeSignal.Companion.toPoko(rms);
+            } catch (InvalidProtocolBufferException e) {
+                e.printStackTrace();
+                System.err.println("Encountered parsing error will not update labels.");
+            }
+        }
+        return updateLabels(signal);
     }
 
     private Unit updateLabels(RemoteMicroscopeSignal signal) {
