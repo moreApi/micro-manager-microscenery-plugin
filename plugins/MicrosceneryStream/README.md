@@ -1,10 +1,10 @@
 ## Micro-Manager Microscenery plugin
 
-For orginal readme see parent repo.
+For original readme see parent repo.
 
 ### How to build
 
-- do the prequisites of [https://micro-manager.org/Writing_plugins_for_Micro-Manager]
+- do the prerequisites of [https://micro-manager.org/Writing_plugins_for_Micro-Manager]
 - build microscenery-core and copy "..\core\build\libs\microscenery-core-1.0-SNAPSHOT.jar" to "'\dependencies\artifacts\compile'"
     - or './gradlew build' should work, too
 - run './gradlew copyRuntimeLibs' in microscenery
