@@ -16,15 +16,21 @@ public class ImageProcessor implements Processor {
 
     private long lastImage = 0;
 
+    float imgRate = Float.MAX_VALUE;
+
     public ImageProcessor(MicrosceneryContext mmContext) {
+        mmContext.msSettings.setIfUnset(Settings.MMMicroscope.Stream.ImageRateLimitPerSec,Float.MAX_VALUE);
+
         this.mmContext = mmContext;
+        mmContext.msSettings.addUpdateRoutine(Settings.MMMicroscope.Stream.ImageRateLimitPerSec, true,() -> {
+            mmContext.msSettings.get(Settings.MMMicroscope.Stream.ImageRateLimitPerSec,Float.MAX_VALUE);
+            return null;
+        });
     }
 
     @Override
     public void processImage(Image image, ProcessorContext context) {
-        Metadata meta = image.getMetadata();
 
-        float imgRate = mmContext.msSettings.get(Settings.MMMicroscope.Stream.ImageRateLimitPerSec,Float.MAX_VALUE);
         if (imgRate <= 0.0) imgRate = Float.MAX_VALUE;
         long timeBetweenImages = (long) (1000 / imgRate);
         long now = System.currentTimeMillis();
@@ -42,6 +48,7 @@ public class ImageProcessor implements Processor {
 
         Vector3f pos;
         if (mmContext.msSettings.get(Settings.MMMicroscope.UseImageMetadataPosition,false) ){
+            Metadata meta = image.getMetadata();
             pos = new Vector3f(
                     meta.getXPositionUm().floatValue(),
                     meta.getYPositionUm().floatValue(),
