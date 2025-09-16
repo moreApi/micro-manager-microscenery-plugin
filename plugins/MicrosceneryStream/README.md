@@ -11,7 +11,7 @@ For original readme see parent repo.
 - copy microscenerys dependencies from the '\microsceneryDependencies' folder into '\dependencies\artifacts\compile'
 - run 'ant jar'
 
-#### Build with Idea
+#### Build with Intellij
 
 - copy "C:\Users\JanCasus\repos\micro-manager\dependencies\artifacts\compile\iconloader-GIT.jar" also into "'\dependencies\artifacts\compile'"
 - install ant plugin
@@ -20,6 +20,11 @@ For original readme see parent repo.
 - point IDE to "C:\Program Files\Micro-Manager-2.0"
 - point IDE to "C:\Program Files\Micro-Manager-2.0\plugins\MicroManager"
 - delete old protobuff dependency (2.x) from "\dependencies\artifacts\compile"
+
+#### Debug with Intellij
+
+[https://micro-manager.org/Using_IntelliJ]
++ "do not build before run" in config
 
 ### Prepare a MicroManger Installation for the plugin
 

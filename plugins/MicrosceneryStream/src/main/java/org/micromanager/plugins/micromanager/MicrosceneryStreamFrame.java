@@ -48,7 +48,7 @@ import java.util.stream.Collectors;
 public class MicrosceneryStreamFrame extends JFrame implements ProcessorConfigurator {
 
     @SuppressWarnings("FieldCanBeLocal")
-    private final String version = "fesh stage limits 2";
+    private final String version = "rate limit doc";
 
     private final JLabel statusLabel_;
     private final JLabel portLabel_;
